@@ -1,17 +1,20 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Album from "./components/Album/Album";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getAlbums } from "./store/albums/thunks";
+import { albumsSelector } from "./store/albums/selector";
 
 function App() {
-  const [albums, setAlbums] = useState([]);
-  const getAlbums = async () => {
-    const res = await axios.get("https://jsonplaceholder.typicode.com/albums");
-    setAlbums(res.data);
-  };
+  const albums = useSelector(albumsSelector);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    getAlbums();
-  }, []);
+    const fetchAlbums = async () => {
+      dispatch(getAlbums());
+    };
+    fetchAlbums();
+  }, [dispatch]);
 
   return (
     <div className="App">
